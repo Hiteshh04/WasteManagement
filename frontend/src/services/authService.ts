@@ -1,8 +1,12 @@
 import api from './api';
 
 export const authService = {
-  studentGoogleLogin: async (token: string, name: string, email: string) => {
-    const response = await api.post('/auth/google/login', { token, name, email });
+  studentGoogleLogin: async (googleAccessToken: string, name: string, email: string) => {
+    const response = await api.post('/auth/google/login', { 
+      token: googleAccessToken, 
+      name, 
+      email 
+    });
     return response.data;
   },
 

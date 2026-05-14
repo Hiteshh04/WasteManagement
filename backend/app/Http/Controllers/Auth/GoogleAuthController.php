@@ -29,26 +29,26 @@ class GoogleAuthController extends Controller
     {
         try {
             // Validate the request
-            $request->validate([
-                'token' => 'required|string',  // Google OAuth token from browser
+            $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+                'token' => 'required|string',  // Google OAuth token (access_token)
                 'name' => 'required|string',   // Student name
                 'email' => 'required|email',   // Student email
             ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 400);
+            }
 
             // Extract data from request
             $token = $request->input('token');
             $name = $request->input('name');
             $email = $request->input('email');
 
-            // IMPORTANT: In production, verify the token with Google API
-            // For now, we'll use email as the identifier
-            // In production, add token verification here using Google's API
-
-            /**
-             * Find existing user by email or create new one
-             * - If user exists, just return their existing data
-             * - If new user, create account with Google ID
-             */
+            // Find existing user by email or create new one
             $user = User::where('email', $email)->first();
 
             if (!$user) {
@@ -56,16 +56,17 @@ class GoogleAuthController extends Controller
                 $user = User::create([
                     'name' => $name,
                     'email' => $email,
-                    'google_id' => $token,  // Store Google ID for future reference
-                    'role' => 'student',    // Set role as student
+                    'google_id' => $token,
+                    'role' => 'student',
                 ]);
+            } else {
+                // Update Google ID if it changed (optional)
+                $user->update(['google_id' => $token]);
             }
 
-            // Generate API token for authenticated requests
-            // This token is used in header: "Authorization: Bearer {token}"
+            // Generate API token using the custom createToken method in User model
             $apiToken = $user->createToken('auth_token')->plainTextToken;
 
-            // Return success response with token
             return response()->json([
                 'success' => true,
                 'message' => 'Login successful',
@@ -79,11 +80,11 @@ class GoogleAuthController extends Controller
             ], 200);
 
         } catch (\Exception $e) {
-            // Return error response
             return response()->json([
                 'success' => false,
                 'message' => 'Login failed',
                 'error' => $e->getMessage(),
+                'trace' => config('app.debug') ? $e->getTrace() : null
             ], 400);
         }
     }

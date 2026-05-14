@@ -22,11 +22,12 @@ export default function StudentLogin() {
         headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
       });
       
-      const { name, email, picture } = userInfo.data;
-      console.log('User info fetched:', { name, email });
+      const { name, given_name, family_name, email, picture } = userInfo.data;
+      const fullName = name || `${given_name} ${family_name}`.trim();
+      console.log('User info fetched:', { fullName, email });
 
       // Send to backend
-      const response = await authService.studentGoogleLogin(tokenResponse.access_token, name, email);
+      const response = await authService.studentGoogleLogin(tokenResponse.access_token, fullName, email);
       console.log('Backend login response:', response);
       
       // Update context and local storage — include Google profile photo
