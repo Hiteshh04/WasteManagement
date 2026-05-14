@@ -35,8 +35,8 @@ export default function StudentLogin() {
       
       toast.success('Successfully logged in!');
       navigate('/student/dashboard');
-    } catch (err) {
-      console.error('Google Auth detailed error:', err);
+    } catch (err: any) {
+      console.error('Google Auth detailed error:', err.response?.data || err);
       toast.error('Login failed. Please try again.');
     } finally {
       setLoading(false);
