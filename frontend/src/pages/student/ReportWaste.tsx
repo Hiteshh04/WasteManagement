@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
@@ -16,7 +17,12 @@ const schema = yup.object({
   note: yup.string().max(500, 'Note must be less than 500 characters'),
 }).required();
 
-type FormData = yup.InferType<typeof schema>;
+type FormData = {
+  waste_type: string;
+  smell: boolean;
+  severity: string;
+  note?: string;
+};
 
 export default function ReportWaste() {
   const navigate = useNavigate();
@@ -26,7 +32,7 @@ export default function ReportWaste() {
   const [submitting, setSubmitting] = useState(false);
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
     defaultValues: {
       smell: false,
       severity: 'medium'
@@ -45,7 +51,7 @@ export default function ReportWaste() {
     setShowCamera(false);
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     if (!imageStr) {
       toast.error('Please capture an image of the waste first.');
       return;

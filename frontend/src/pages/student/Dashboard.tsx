@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Leaf, CheckCircle, Clock, Star, FileText, AlertTriangle, Trophy } from 'lucide-react';
+import { Leaf, CheckCircle, Clock, Star, FileText, Trophy } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { reportService } from '../../services/reportService';
 

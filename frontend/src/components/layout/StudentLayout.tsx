@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   Leaf, LayoutDashboard, AlertTriangle, FileText,
-  Trophy, Gift, BookOpen, Menu, HelpCircle, ChevronLeft
+  Menu, HelpCircle, ChevronLeft
 } from 'lucide-react';
 import ProfileDropdown from './ProfileDropdown';
 

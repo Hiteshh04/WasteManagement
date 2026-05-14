@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ShieldCheck, Clock, CheckCircle, TrendingUp,
-  AlertTriangle, ArrowRight, BarChart3, Users
+  ArrowRight, BarChart3, Users
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { reportService } from '../../services/reportService';

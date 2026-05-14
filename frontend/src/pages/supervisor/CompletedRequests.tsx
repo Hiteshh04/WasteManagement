@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { reportService } from '../../services/reportService';
-import { MapPin, CheckCircle, Calendar, ArrowRight } from 'lucide-react';
+import { MapPin, CheckCircle, Calendar } from 'lucide-react';
 
 export default function CompletedRequests() {
   const [reports, setReports] = useState<any[]>([]);
