@@ -80,12 +80,21 @@ class GoogleAuthController extends Controller
             ], 200);
 
         } catch (\Exception $e) {
-            return response()->json([
+            // Detailed error reporting for debugging 400 Bad Request
+            $errorResponse = [
                 'success' => false,
                 'message' => 'Login failed',
                 'error' => $e->getMessage(),
-                'trace' => config('app.debug') ? $e->getTrace() : null
-            ], 400);
+                'error_type' => get_class($e),
+                'request_data' => $request->all(),
+            ];
+
+            // If it's a validation exception (unlikely here but just in case)
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
+                $errorResponse['errors'] = $e->errors();
+            }
+
+            return response()->json($errorResponse, 400);
         }
     }
 
